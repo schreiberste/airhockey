@@ -1,7 +1,7 @@
 # Airhockey
 ### 3D Multiplayer Airhockey
 
-This is a 3D multiplayer airhockey based on [libGdx](libgdx.badlogicgames.com).
+This is a 3D multiplayer airhockey based on [libGdx](http://libgdx.badlogicgames.com).
 
 ## Features
 * Classic two player Airhockey against computer or other human player via network
