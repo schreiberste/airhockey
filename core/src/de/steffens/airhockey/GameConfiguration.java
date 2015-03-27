@@ -76,6 +76,7 @@ public class GameConfiguration {
         numPlayers = prefs.getInteger("numPlayers", numPlayers);
         breakout = prefs.getBoolean("breakout", breakout);
         showConsole = prefs.getBoolean("showConsole", showConsole);
+        maximumScore = prefs.getInteger("maximumScore", maximumScore);
     }
 
     public void write(DataOutputStream os) throws IOException {
@@ -247,6 +248,13 @@ public class GameConfiguration {
         prefs.flush();
     }
 
+    public static void setMaximumScore(int score) {
+        getConfig().maximumScore = score;
+        Preferences prefs = Gdx.app.getPreferences(PREFS_NAME);
+        prefs.putInteger("maximumScore", score);
+        prefs.flush();
+    }
+
     public static GameConfiguration create(String[] args) {
         GameConfiguration config = new GameConfiguration();
         for (int i = 0; i < args.length; i++) {
@@ -330,6 +338,7 @@ public class GameConfiguration {
         result.serverAddress = serverAddress;
         result.showCursor = showCursor;
         result.playerName = playerName;
+        result.maximumScore = maximumScore;
         System.arraycopy(playerColor, 0, result.playerColor, 0, 3);
         return result;
     }
