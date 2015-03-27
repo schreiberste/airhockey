@@ -421,6 +421,13 @@ public class PlayingFieldTwoPlayers extends AbstractPlayingFieldBase {
                 if (e.wall == wall) {
                     score(playerIndex, e.disk.getLastHitPlayerIndex());
 
+                    // check whether the game is over
+                    if (Game.isGameOver()) {
+                        Game.getDisplay().removeObject(Game.getPuck());
+                        Game.getSimulation().removeDisk(Game.getPuck());
+                        stopGame();
+                        return;
+                    }
                     // if the disk is "the puck", reset the field and start a new round
                     if (e.disk == Game.getPuck()) {
                         e.disk.setPosition(getKickoffPosition(playerIndex));
