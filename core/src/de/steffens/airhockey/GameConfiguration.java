@@ -38,7 +38,7 @@ public class GameConfiguration {
     private int numPlayers = 5;
     private boolean breakout = false;
     private boolean showConsole = true;
-
+    private int maximumScore = 10;
 
     /**
      * Create a new game configuration initialized with default values
@@ -145,6 +145,7 @@ public class GameConfiguration {
         return width;
     }
 
+    public int getMaximumScore() { return maximumScore; }
 
     public int getFramesPerSecond() {
         return fps;

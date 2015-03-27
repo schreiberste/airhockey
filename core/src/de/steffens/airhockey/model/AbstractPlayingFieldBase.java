@@ -269,6 +269,22 @@ public abstract class AbstractPlayingFieldBase implements PlayingField {
         Game.getSimulation().update();
     }
 
+    protected void stopGame() {
+        int winner = 0;
+        int[] score = Game.getScore();
+        for (int i = 1; i < numPlayers; i++) {
+            if (score[i] > score[winner]) {
+                winner = i;
+            }
+        }
+        Game.getDisplay().showFlashMsg("Player " + Game.getPlayer(winner).getName() + " won", Long.MAX_VALUE, 0);
+        for (int i = 0; i < Game.getPlayerCount(); i++) {
+            Game.getPlayer(i).getControlledDisk().setPosition(getInitialPosition(i));
+            Game.getPlayer(i).setWait(true);
+        }
+        System.out.println("\n\nPlayer " + Game.getPlayer(winner).getName() + " won");
+    }
+
     protected abstract void resetStateImpl();
 
     @Override

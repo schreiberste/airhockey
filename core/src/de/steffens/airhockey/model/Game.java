@@ -64,6 +64,15 @@ public class Game {
         return score;
     }
 
+    public static boolean isGameOver() {
+        for (int i : score) {
+            if (i >= config.getMaximumScore()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static void setPuck(Disk puck) {
         Game.puck = puck;
     }
