@@ -53,6 +53,12 @@ public abstract class AbstractPlayingFieldBase implements PlayingField {
         reachableAreas = new Rectangle[numPlayers];
         reachableAreaUps = new Vector2D[numPlayers];
         cameraPositions = new float[numPlayers][3];
+        Game.getSimulation().addGameTimeoutListener(new Simulation.GameTimeoutListener() {
+            @Override
+            public void gameTimeout() {
+                stopGame();
+            }
+        });
     }
 
     /**
@@ -263,6 +269,8 @@ public abstract class AbstractPlayingFieldBase implements PlayingField {
     }
 
     protected void stopGame() {
+        Game.getDisplay().removeObject(Game.getPuck());
+        Game.getSimulation().removeDisk(Game.getPuck());
         int winner = 0;
         int[] score = Game.getScore();
         for (int i = 1; i < numPlayers; i++) {

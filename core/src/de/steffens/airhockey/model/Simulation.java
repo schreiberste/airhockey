@@ -64,7 +64,11 @@ public class Simulation {
     /** list of simulation listeners interested in position updates */
     private final ArrayList<SimulationListener> simulationListeners =
         new ArrayList<SimulationListener>();
-    
+
+    /** list of timeout listeners that are notified once the game time is exceeded */
+    private final ArrayList<GameTimeoutListener> timeoutListeners =
+        new ArrayList<GameTimeoutListener>();
+
     /**
      * Add a new listener for collision events.
      * 
@@ -117,7 +121,41 @@ public class Simulation {
 	        }
         }
     }
-    
+
+    /**
+     * Add a new listener for game timeout.
+     *
+     * @param listener the new game timeout listener.
+     */
+    public void addGameTimeoutListener(GameTimeoutListener listener) {
+        synchronized (timeoutListeners) {
+            timeoutListeners.add(listener);
+        }
+    }
+
+    /**
+     * Remove a game timeout listener from the list of registered
+     * game timeout listeners.
+     *
+     * @param listener the listener to remove
+     */
+    public void removeGameTimeoutListener(GameTimeoutListener listener) {
+        synchronized (timeoutListeners) {
+            timeoutListeners.remove(listener);
+        }
+    }
+
+    /**
+     * Notifies all registered game timeout listeners that the game time has been exceeded.
+     */
+    private void notifyGameTimeoutListeners() {
+        synchronized (timeoutListeners) {
+            for (GameTimeoutListener l : timeoutListeners) {
+                l.gameTimeout();
+            }
+        }
+    }
+
     /**
      * Add a disk. This is equivalent to calling 
      * <code>addDisk(disk, true)</code>
@@ -401,6 +439,12 @@ public class Simulation {
 				update();
 			}
 		}, 0, period);
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                notifyGameTimeoutListeners();
+            }
+        }, Game.getMaximumGameLengthMs());
     }
     
     /**
@@ -443,4 +487,14 @@ public class Simulation {
 		 */
 		public void update();
 	}
+
+    /**
+     * Interface used to propagate the end of the game time.
+     */
+    public interface GameTimeoutListener {
+        /**
+         * Called when the game time has been exceeded.
+         */
+        public void gameTimeout();
+    }
 }

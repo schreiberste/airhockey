@@ -100,6 +100,11 @@ public class GameMenu {
     }
 
 
+    private static String getMaximumGameTime() {
+        return Integer.toString(GameConfiguration.getConfig().getMaximumGameTimeMin()) + " min";
+    }
+
+
     private static void createNewGame(final GameConfiguration config) {
 
         // This is called in the AWT event dispatch thread.
@@ -185,6 +190,22 @@ public class GameMenu {
                     }
                 }
                 return getMaximumScore();
+            }
+        };
+
+        final MenuAction maximumGameTime = new InputMenuAction(input) {
+            final int maximumGameTime = GameConfiguration.getConfig().getMaximumGameTimeMin();
+            @Override
+            String finished(MenuItem item, boolean cancelled) {
+                if (!cancelled && input.hasInteger()) {
+                    int newMaximumGameTime = input.getInteger();
+                    if (newMaximumGameTime <= 0 || newMaximumGameTime >= 100) {
+                        GameConfiguration.setMaximumGameTime(maximumGameTime);
+                    } else {
+                        GameConfiguration.setMaximumGameTime(newMaximumGameTime);
+                    }
+                }
+                return getMaximumGameTime();
             }
         };
 
@@ -380,6 +401,7 @@ public class GameMenu {
                             }
                         }));
                         menu.add(new MenuItem("Maximum Score", getMaximumScore(), maximumScoreInput));
+                        menu.add(new MenuItem("Maximum Game Time", getMaximumGameTime(), maximumGameTime));
                         menu.add(back);
                         menu.update();
                     }

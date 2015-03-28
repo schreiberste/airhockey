@@ -423,8 +423,6 @@ public class PlayingFieldTwoPlayers extends AbstractPlayingFieldBase {
 
                     // check whether the game is over
                     if (Game.isGameOver()) {
-                        Game.getDisplay().removeObject(Game.getPuck());
-                        Game.getSimulation().removeDisk(Game.getPuck());
                         stopGame();
                         return;
                     }
