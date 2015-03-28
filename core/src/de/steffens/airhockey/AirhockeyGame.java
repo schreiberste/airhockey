@@ -34,8 +34,8 @@ import de.steffens.airhockey.model.RemoteSimulation;
 import de.steffens.airhockey.model.Simulation;
 import de.steffens.airhockey.model.vector.Vector2D;
 import de.steffens.airhockey.model.vector.VectorFactory;
+import de.steffens.airhockey.net.AbstractServer;
 import de.steffens.airhockey.net.Client;
-import de.steffens.airhockey.net.TcpServer;
 import de.steffens.airhockey.sound.CollisionSoundListener;
 import de.steffens.airhockey.view.GLDisplay;
 
@@ -313,7 +313,7 @@ public class AirhockeyGame extends ApplicationAdapter {
         simulation.addCollisionListener(new CollisionSoundListener());
 
         // ///////// Start server and simulation ////////
-        new TcpServer().start(config, simulation);
+        AbstractServer.createServer(config.getNetworkProtocol()).start(config, simulation);
     }
 
     private void initDisplay(PlayingField field, final Simulation simulation, int playerIndex) {

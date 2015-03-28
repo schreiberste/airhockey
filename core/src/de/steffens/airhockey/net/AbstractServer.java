@@ -22,10 +22,20 @@ import de.steffens.airhockey.view.GLMenu;
  */
 public abstract class AbstractServer {
 
+    public static final String TCP = "TCP/IP";
+    public static final String UDP = "UDP/IP";
+
     private boolean playersReady = false;
     private final Object MONITOR = new Object();
     private GameConfiguration gameCfg;
     private Set<RemotePlayer> remotePlayers = Collections.synchronizedSet(new HashSet<RemotePlayer>());
+
+    public static AbstractServer createServer(String type) {
+        if (TCP.equals(type)) {
+            return new TcpServer();
+        }
+        throw new UnsupportedOperationException("Server type not supported: " + type);
+    }
 
     public void start(final GameConfiguration config, final Simulation simulation) {
         gameCfg = config;

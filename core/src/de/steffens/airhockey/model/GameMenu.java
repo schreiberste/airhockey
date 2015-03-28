@@ -10,6 +10,7 @@ import com.badlogic.gdx.Graphics.DisplayMode;
 import de.steffens.airhockey.GameConfiguration;
 import de.steffens.airhockey.control.TextInput;
 import de.steffens.airhockey.control.TextInput.TextInputListener;
+import de.steffens.airhockey.net.AbstractServer;
 import de.steffens.airhockey.view.GLMenu;
 import de.steffens.airhockey.view.GLMenu.MenuAction;
 import de.steffens.airhockey.view.GLMenu.MenuItem;
@@ -102,6 +103,11 @@ public class GameMenu {
 
     private static String getMaximumGameTime() {
         return Integer.toString(GameConfiguration.getConfig().getMaximumGameTimeMin()) + " min";
+    }
+
+
+    private static String getNetworkProtocol() {
+        return GameConfiguration.getConfig().getNetworkProtocol();
     }
 
 
@@ -402,6 +408,26 @@ public class GameMenu {
                         }));
                         menu.add(new MenuItem("Maximum Score", getMaximumScore(), maximumScoreInput));
                         menu.add(new MenuItem("Maximum Game Time", getMaximumGameTime(), maximumGameTime));
+                        menu.add(back);
+                        menu.update();
+                    }
+                }));
+                menu.add(new MenuItem("Network", new MenuAction() {
+                    @Override
+                    public void run(MenuItem item, int code) {
+                        menu.addMenu();
+                        menu.add(new MenuItem("Protocol", getNetworkProtocol(), new MenuAction() {
+                            @Override
+                            public void run(MenuItem item, int code) {
+
+                                if (AbstractServer.TCP.equals(GameConfiguration.getConfig().getNetworkProtocol())) {
+                                    GameConfiguration.setNetworkProtocol(AbstractServer.UDP);
+                                } else {
+                                    GameConfiguration.setNetworkProtocol(AbstractServer.TCP);
+                                }
+                                item.updateValue(getNetworkProtocol(), false);
+                            }
+                        }));
                         menu.add(back);
                         menu.update();
                     }

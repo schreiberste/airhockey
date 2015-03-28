@@ -10,6 +10,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import de.steffens.airhockey.net.AbstractServer;
+
 /**
  * Helper class for game configuration settings.
  * 
@@ -41,6 +43,7 @@ public class GameConfiguration {
     private boolean showConsole = true;
     private int maximumScore = 10;
     private int maximumGameTimeMin = 10;
+    private String networkProtocol = AbstractServer.TCP;
 
     /**
      * Create a new game configuration initialized with default values
@@ -80,6 +83,7 @@ public class GameConfiguration {
         showConsole = prefs.getBoolean("showConsole", showConsole);
         maximumScore = prefs.getInteger("maximumScore", maximumScore);
         maximumGameTimeMin = prefs.getInteger("maximumGameTime", maximumGameTimeMin);
+        networkProtocol = prefs.getString("networkProtocol", networkProtocol);
     }
 
     public void write(DataOutputStream os) throws IOException {
@@ -165,6 +169,8 @@ public class GameConfiguration {
     public int getMaximumScore() { return maximumScore; }
 
     public int getMaximumGameTimeMin() { return maximumGameTimeMin; }
+
+    public String getNetworkProtocol() { return networkProtocol; }
 
     public int getFramesPerSecond() {
         return fps;
@@ -280,6 +286,13 @@ public class GameConfiguration {
         prefs.flush();
     }
 
+    public static void setNetworkProtocol(String protocol) {
+        getConfig().networkProtocol = protocol;
+        Preferences prefs = Gdx.app.getPreferences(PREFS_NAME);
+        prefs.putString("networkProtocol", protocol);
+        prefs.flush();
+    }
+
     public static GameConfiguration create(String[] args) {
         GameConfiguration config = new GameConfiguration();
         for (int i = 0; i < args.length; i++) {
@@ -365,6 +378,7 @@ public class GameConfiguration {
         result.playerName = playerName;
         result.maximumScore = maximumScore;
         result.maximumGameTimeMin = maximumGameTimeMin;
+        result.networkProtocol = networkProtocol;
         System.arraycopy(playerColor, 0, result.playerColor, 0, 3);
         return result;
     }
