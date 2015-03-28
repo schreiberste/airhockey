@@ -259,13 +259,6 @@ public abstract class AbstractPlayingFieldBase implements PlayingField {
         }
         resetStateImpl();
 
-        System.out.println("\n\nPlaying field reset " + (++resetCount));
-        System.out.print("Walls now: ");
-        for (Wall wall : getWalls()) {
-            System.out.print(wall.getIndex() + " ");
-        }
-        System.out.println();
-
         Game.getSimulation().update();
     }
 
