@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.List;
 
 import de.steffens.airhockey.control.AIPlayer;
+import de.steffens.airhockey.control.AiClientPlayer;
 import de.steffens.airhockey.control.GlobalUiInputProcessor;
 import de.steffens.airhockey.control.HumanClientPlayer;
 import de.steffens.airhockey.control.HumanPlayer;
@@ -198,7 +199,12 @@ public class AirhockeyGame extends ApplicationAdapter {
             disks[plIdx] = Disk.read(Client.getIs());
             simulation.addDisk(disks[plIdx]);
             if (plIdx == Client.getPlayer()) {
-                players[plIdx] = new HumanClientPlayer(plIdx, disks[plIdx], puckModel);
+                if (config.isHumanPlayer()) {
+                    players[plIdx] = new HumanClientPlayer(plIdx, disks[plIdx], puckModel);
+                }
+                else {
+                    players[plIdx] = new AiClientPlayer(plIdx, disks[plIdx], puckModel);
+                }
                 players[plIdx].setName(config.getPlayerName());
                 players[plIdx].setColor(config.getPlayerColor());
             } else {
