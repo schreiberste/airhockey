@@ -15,13 +15,13 @@ import de.steffens.airhockey.model.Simulation.SimulationListener;
  * The listener for simulation and collision events on the server side that
  * sends updates to the connected client.
  */
-public class ServerSimulationForward implements SimulationListener, CollisionListener {
+public class TcpServerSimulationForward implements SimulationListener, CollisionListener {
 
     private final DataOutputStream os;
     private boolean error = false;
 
 
-    public ServerSimulationForward(DataOutputStream os) {
+    public TcpServerSimulationForward(DataOutputStream os) {
         this.os = os;
     }
 
