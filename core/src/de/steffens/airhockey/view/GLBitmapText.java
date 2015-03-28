@@ -12,6 +12,7 @@ public class GLBitmapText extends GLHudElement {
     /** Approximate height of the unscaled font. */
     public static final int FONT_HEIGHT = 70;
 
+    private static final String ASSETS_PREFIX = System.getProperty("de.steffens.airhockey.view.assets", "");
     private static BitmapFont font;
 
     public String text;
@@ -47,8 +48,8 @@ public class GLBitmapText extends GLHudElement {
             return;
         }
         font= new BitmapFont(
-            Gdx.files.internal("img/fonts/DroidSans42.fnt"),
-            Gdx.files.internal("img/fonts/DroidSans42.png"), false);
+            Gdx.files.internal(ASSETS_PREFIX + "img/fonts/DroidSans42.fnt"),
+            Gdx.files.internal(ASSETS_PREFIX + "img/fonts/DroidSans42.png"), false);
         font.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
     }
 

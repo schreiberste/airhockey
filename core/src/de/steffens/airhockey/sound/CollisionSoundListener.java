@@ -13,8 +13,10 @@ import de.steffens.airhockey.model.MovingObject;
  */
 public class CollisionSoundListener implements CollisionListener {
 
-    private static Sound wallSound = Gdx.audio.newSound(Gdx.files.internal("sfx/wall001.mp3"));
-    private static Sound puckSound = Gdx.audio.newSound(Gdx.files.internal("sfx/puck001.mp3"));
+    private static final String ASSETS_PREFIX = System.getProperty("de.steffens.airhockey.view.assets", "");
+
+    private static Sound wallSound = Gdx.audio.newSound(Gdx.files.internal(ASSETS_PREFIX + "sfx/wall001.mp3"));
+    private static Sound puckSound = Gdx.audio.newSound(Gdx.files.internal(ASSETS_PREFIX + "sfx/puck001.mp3"));
 
     /**
      * @see de.steffens.airhockey.model.CollisionListener#collisionOccurred(de.steffens.airhockey.model.CollisionListener.DiskWallCollision)
