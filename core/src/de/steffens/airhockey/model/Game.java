@@ -29,6 +29,7 @@ public class Game {
     private static GameConfiguration config = null;
     private static AirhockeyGame main = null;
     private static Console console = new Console();
+    private static long gameTimeoutMs = -1;
 
 
     public static void setPlayingField(PlayingField field) {
@@ -63,6 +64,20 @@ public class Game {
     public static int[] getScore() {
         return score;
     }
+
+    public static boolean isGameOver() {
+        if (System.currentTimeMillis() > gameTimeoutMs) {
+            return true;
+        }
+        for (int i : score) {
+            if (i >= config.getMaximumScore()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static long getMaximumGameLengthMs() { return config.getMaximumGameTimeMin() * 60 * 1000; }
 
     public static void setPuck(Disk puck) {
         Game.puck = puck;
@@ -126,6 +141,7 @@ public class Game {
     public static void createGame(GameConfiguration gameConfig) {
         getDisplay().dispose();
         getSimulation().stop();
+        gameTimeoutMs = System.currentTimeMillis() + gameConfig.getMaximumGameTimeMin() * 60 * 1000;
 
         main.createGame(gameConfig);
     }

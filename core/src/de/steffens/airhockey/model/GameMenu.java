@@ -95,6 +95,16 @@ public class GameMenu {
     }
 
 
+    private static String getMaximumScore() {
+        return Integer.toString(GameConfiguration.getConfig().getMaximumScore());
+    }
+
+
+    private static String getMaximumGameTime() {
+        return Integer.toString(GameConfiguration.getConfig().getMaximumGameTimeMin()) + " min";
+    }
+
+
     private static void createNewGame(final GameConfiguration config) {
 
         // This is called in the AWT event dispatch thread.
@@ -164,6 +174,38 @@ public class GameMenu {
                     }
                 }
                 return getRemotePlayers();
+            }
+        };
+
+        final MenuAction maximumScoreInput = new InputMenuAction(input) {
+            final int maximumScore = GameConfiguration.getConfig().getMaximumScore();
+            @Override
+            String finished(MenuItem item, boolean cancelled) {
+                if (!cancelled && input.hasInteger()) {
+                    int newMaximumScore = input.getInteger();
+                    if (newMaximumScore <= 0 || newMaximumScore >= 100) {
+                        GameConfiguration.setMaximumScore(maximumScore);
+                    } else {
+                        GameConfiguration.setMaximumScore(newMaximumScore);
+                    }
+                }
+                return getMaximumScore();
+            }
+        };
+
+        final MenuAction maximumGameTime = new InputMenuAction(input) {
+            final int maximumGameTime = GameConfiguration.getConfig().getMaximumGameTimeMin();
+            @Override
+            String finished(MenuItem item, boolean cancelled) {
+                if (!cancelled && input.hasInteger()) {
+                    int newMaximumGameTime = input.getInteger();
+                    if (newMaximumGameTime <= 0 || newMaximumGameTime >= 100) {
+                        GameConfiguration.setMaximumGameTime(maximumGameTime);
+                    } else {
+                        GameConfiguration.setMaximumGameTime(newMaximumGameTime);
+                    }
+                }
+                return getMaximumGameTime();
             }
         };
 
@@ -283,68 +325,87 @@ public class GameMenu {
                             }
                         }
                     }
-                    final MenuItem resolutionMenu = new MenuItem("Resolution", getResolution(), new MenuAction() {
+                    menu.add(new MenuItem("Graphics", new MenuAction() {
                         @Override
                         public void run(MenuItem item, int code) {
-                            if (currentVidMode == -1) {
-                                // we seem to be in a resized window. choose nearest resolution
-                                currentVidMode = nearestVidMode;
-                            }
-                            else if (code >= 0) {
-                                // choose next resolution in list
-                                currentVidMode = (currentVidMode + 1) % vidModes.length;
-                            }
-                            else {
-                                // choose previous resolution in list
-                                currentVidMode--;
-                                if (currentVidMode < 0) {
-                                    currentVidMode = vidModes.length-1;
-                                }
-                            }
-                            GameConfiguration.getConfig().setResolution(
-                                vidModes[currentVidMode].width, vidModes[currentVidMode].height);
-                            item.updateValue(getResolution(), false);
-                            videoModeChanged = true;
-                        }
-                    });
-                    menu.add(resolutionMenu);
-
-                    menu.add(new MenuItem("Fullscreen", getFullscreen(), new MenuAction() {
-                        @Override
-                        public void run(MenuItem item, int code) {
-                            boolean fullScreen = !GameConfiguration.getConfig().isFullScreen();
-                            GameConfiguration.setFullScreen(fullScreen);
-                            item.updateValue(getFullscreen(), false);
-                            videoModeChanged = true;
-                            // when fullscreen is selected, make sure the resolution is
-                            // set to some available mode
-                            if (fullScreen) {
-                                if (currentVidMode == -1) {
-                                    currentVidMode = nearestVidMode;
+                            menu.addMenu();
+                            final MenuItem resolutionMenu = new MenuItem("Resolution", getResolution(), new MenuAction() {
+                                @Override
+                                public void run(MenuItem item, int code) {
+                                    if (currentVidMode == -1) {
+                                        // we seem to be in a resized window. choose nearest resolution
+                                        currentVidMode = nearestVidMode;
+                                    }
+                                    else if (code >= 0) {
+                                        // choose next resolution in list
+                                        currentVidMode = (currentVidMode + 1) % vidModes.length;
+                                    }
+                                    else {
+                                        // choose previous resolution in list
+                                        currentVidMode--;
+                                        if (currentVidMode < 0) {
+                                            currentVidMode = vidModes.length-1;
+                                        }
+                                    }
                                     GameConfiguration.getConfig().setResolution(
                                         vidModes[currentVidMode].width, vidModes[currentVidMode].height);
-                                    resolutionMenu.updateValue(getResolution(), false);
+                                    item.updateValue(getResolution(), false);
+                                    videoModeChanged = true;
                                 }
-                            }
+                            });
+                            menu.add(resolutionMenu);
+
+                            menu.add(new MenuItem("Fullscreen", getFullscreen(), new MenuAction() {
+                                @Override
+                                public void run(MenuItem item, int code) {
+                                    boolean fullScreen = !GameConfiguration.getConfig().isFullScreen();
+                                    GameConfiguration.setFullScreen(fullScreen);
+                                    item.updateValue(getFullscreen(), false);
+                                    videoModeChanged = true;
+                                    // when fullscreen is selected, make sure the resolution is
+                                    // set to some available mode
+                                    if (fullScreen) {
+                                        if (currentVidMode == -1) {
+                                            currentVidMode = nearestVidMode;
+                                            GameConfiguration.getConfig().setResolution(
+                                                vidModes[currentVidMode].width, vidModes[currentVidMode].height);
+                                            resolutionMenu.updateValue(getResolution(), false);
+                                        }
+                                    }
+                                }
+                            }));
+//                          menu.add(new MenuItem("Mouse Cursor", getCursor(), new MenuAction() {
+//                              @Override
+//                              public void run(MenuItem item) {
+//                                  boolean showCursor = GameConfiguration.getConfig().showCursor();
+//                                  GameConfiguration.setShowCursor(!showCursor);
+//                                  item.updateValue(getCursor());
+//                              }
+//                          }));
+                            menu.add(back);
+                            menu.update();
                         }
                     }));
+
                 }
-                menu.add(new MenuItem("Breakout", getBreakout(), new MenuAction() {
+                menu.add(new MenuItem("Game", new MenuAction() {
                     @Override
                     public void run(MenuItem item, int code) {
-                        boolean breakout = GameConfiguration.getConfig().isBreakout();
-                        GameConfiguration.setBreakout(!breakout);
-                        item.updateValue(getBreakout(), false);
+                        menu.addMenu();
+                        menu.add(new MenuItem("Breakout", getBreakout(), new MenuAction() {
+                            @Override
+                            public void run(MenuItem item, int code) {
+                                boolean breakout = GameConfiguration.getConfig().isBreakout();
+                                GameConfiguration.setBreakout(!breakout);
+                                item.updateValue(getBreakout(), false);
+                            }
+                        }));
+                        menu.add(new MenuItem("Maximum Score", getMaximumScore(), maximumScoreInput));
+                        menu.add(new MenuItem("Maximum Game Time", getMaximumGameTime(), maximumGameTime));
+                        menu.add(back);
+                        menu.update();
                     }
                 }));
-//                menu.add(new MenuItem("Mouse Cursor", getCursor(), new MenuAction() {
-//                    @Override
-//                    public void run(MenuItem item) {
-//                        boolean showCursor = GameConfiguration.getConfig().showCursor();
-//                        GameConfiguration.setShowCursor(!showCursor);
-//                        item.updateValue(getCursor());
-//                    }
-//                }));
 
                 menu.add(new MenuItem("Back", new MenuAction() {
                     @Override

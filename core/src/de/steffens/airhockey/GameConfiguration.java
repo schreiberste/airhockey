@@ -38,7 +38,8 @@ public class GameConfiguration {
     private int numPlayers = 5;
     private boolean breakout = false;
     private boolean showConsole = true;
-
+    private int maximumScore = 10;
+    private int maximumGameTimeMin = 10;
 
     /**
      * Create a new game configuration initialized with default values
@@ -76,6 +77,8 @@ public class GameConfiguration {
         numPlayers = prefs.getInteger("numPlayers", numPlayers);
         breakout = prefs.getBoolean("breakout", breakout);
         showConsole = prefs.getBoolean("showConsole", showConsole);
+        maximumScore = prefs.getInteger("maximumScore", maximumScore);
+        maximumGameTimeMin = prefs.getInteger("maximumGameTime", maximumGameTimeMin);
     }
 
     public void write(DataOutputStream os) throws IOException {
@@ -145,6 +148,9 @@ public class GameConfiguration {
         return width;
     }
 
+    public int getMaximumScore() { return maximumScore; }
+
+    public int getMaximumGameTimeMin() { return maximumGameTimeMin; }
 
     public int getFramesPerSecond() {
         return fps;
@@ -246,6 +252,20 @@ public class GameConfiguration {
         prefs.flush();
     }
 
+    public static void setMaximumScore(int score) {
+        getConfig().maximumScore = score;
+        Preferences prefs = Gdx.app.getPreferences(PREFS_NAME);
+        prefs.putInteger("maximumScore", score);
+        prefs.flush();
+    }
+
+    public static void setMaximumGameTime(int gameTime) {
+        getConfig().maximumGameTimeMin = gameTime;
+        Preferences prefs = Gdx.app.getPreferences(PREFS_NAME);
+        prefs.putInteger("maximumGameTime", gameTime);
+        prefs.flush();
+    }
+
     public static GameConfiguration create(String[] args) {
         GameConfiguration config = new GameConfiguration();
         for (int i = 0; i < args.length; i++) {
@@ -329,6 +349,8 @@ public class GameConfiguration {
         result.serverAddress = serverAddress;
         result.showCursor = showCursor;
         result.playerName = playerName;
+        result.maximumScore = maximumScore;
+        result.maximumGameTimeMin = maximumGameTimeMin;
         System.arraycopy(playerColor, 0, result.playerColor, 0, 3);
         return result;
     }
