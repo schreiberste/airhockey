@@ -86,12 +86,16 @@ public class GameConfiguration {
         os.writeInt(numPlayers);
         os.writeBoolean(breakout);
         os.writeBoolean(showConsole);
+        os.writeInt(maximumGameTimeMin);
+        os.writeInt(maximumScore);
     }
 
     public void read(DataInputStream is) throws IOException {
         numPlayers = is.readInt();
         breakout = is.readBoolean();
         showConsole = is.readBoolean();
+        maximumGameTimeMin = is.readInt();
+        maximumScore = is.readInt();
     }
 
     public static GameConfiguration getConfig() {
