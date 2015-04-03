@@ -391,6 +391,7 @@ public class GameConfiguration {
         GameConfiguration result = getConfig().copy();
         result.humanPlayer = false;
         result.numPlayers = 3;
+        result.remotePlayers = -1;
         result.port = -1;
         result.showConsole = false;
         result.breakout = false;

@@ -69,6 +69,12 @@ public class AIPlayer extends Player {
                 if (range.isInside(tmp.reset(puckPos))) {
                     // move in direction to the puck
                     newVelocity = tmp.getVelocity(oldPosition, puckPos, deltaT);
+                    // add some randomness
+                    double x = newVelocity.getX();
+                    x = x + (0.02 * x * (Math.random() - 0.5));
+                    double y = newVelocity.getY();
+                    y = y + (0.02 * y * (Math.random() - 0.5));
+                    newVelocity.reset(x, y);
                 } else {
                     // FIXME: moving at the base line is not working for generic playing fields
                     // if the puck is out of range, go back to the initial position,
