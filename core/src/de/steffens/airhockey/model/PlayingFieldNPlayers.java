@@ -406,18 +406,26 @@ public class PlayingFieldNPlayers extends AbstractPlayingFieldBase {
                 if (e.wall == wall) {
                     score(playerIndex, e.disk.getLastHitPlayerIndex());
 
-                    // if the disk is "the puck", reset the field and start a new round
+                    // if the disk is not the main puck, remove it
+                    if (e.disk != Game.getPuck()) {
+                        Game.getDisplay().removeObject(e.disk);
+                        Game.getSimulation().removeDisk(e.disk);
+                    }
+
+                    // check whether the game is over
+                    if (Game.isGameOver()) {
+                        stopGame();
+                        return;
+                    }
+
+                    // the disk is "the puck", reset the field and start a new round
                     if (e.disk == Game.getPuck()) {
                         e.disk.setPosition(getKickoffPosition(playerIndex));
                         e.disk.setVelocity(0, 0);
                         // reset the playing field
                         resetState(false);
                     }
-                    // otherwise, just remove the disk
-                    else if (e.disk != null) {
-                        Game.getDisplay().removeObject(e.disk);
-                        Game.getSimulation().removeDisk(e.disk);
-                    }
+
                 }
             }
 
@@ -430,6 +438,10 @@ public class PlayingFieldNPlayers extends AbstractPlayingFieldBase {
 
 
     private void score(int playerIndex, int hitByPlayerIndex) {
+        // ignore goal hits after game over...
+        if (Game.isGameOver()) {
+            return;
+        }
         Player player = Game.getPlayer(playerIndex);
         player.goalHit();
         if (Game.isClient()) {
