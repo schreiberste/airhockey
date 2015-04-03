@@ -221,9 +221,6 @@ public class AirhockeyGame extends ApplicationAdapter {
 
         initDisplay(field, simulation, Client.getPlayer());
 
-        // ////////// initial game state /////////////////
-
-        simulation.start();
 
         // ///////////////// Sound //////////////////////
 
@@ -233,7 +230,6 @@ public class AirhockeyGame extends ApplicationAdapter {
         // ///////////////// Network //////////////////////
 
         Client.start();
-        field.resetState(true);
     }
 
     private void initServer(GameConfiguration config) {

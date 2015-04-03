@@ -21,4 +21,6 @@ public interface MSG {
     int CONSOLE_LINE = 5;
 
     int NEW_PLAYER_DATA = 6;
+
+    int START_GAME = 7;
 }

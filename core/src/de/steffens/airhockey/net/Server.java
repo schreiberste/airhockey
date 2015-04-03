@@ -51,8 +51,7 @@ public class Server {
 
                 // all players connected, start simulation
                 System.out.println("[" + Thread.currentThread().getName()+"]: players connected, starting simulation...");
-                Game.getPlayingField().resetState(true);
-                simulation.start();
+                Game.start();
             }
         }, "Server Startup Thread").start();
 
@@ -116,7 +115,7 @@ public class Server {
                 }
             }
 
-            // broadcast player data  to all clients
+            // broadcast player data  to all clients and send the "Start" signal
             System.out.println("[" + Thread.currentThread().getName()+"]: broadcast player data");
             for (RemotePlayer remotePlayer : remotePlayers) {
                 DataOutputStream out = remotePlayer.getConnection();
@@ -125,6 +124,7 @@ public class Server {
                     out.writeInt(playerIndex);
                     Game.getPlayer(playerIndex).writeData(out);
                 }
+                out.writeInt(MSG.START_GAME);
             }
 
         } catch (IOException e) {

@@ -55,6 +55,9 @@ public class Client {
                     while (true) {
                         int msg = getIs().readInt();
                         switch (msg) {
+                            case MSG.START_GAME:
+                                Game.start();
+                                break;
                             case MSG.SIMULATION_UPDATE:
                                 readSimulationUpdate();
                                 break;

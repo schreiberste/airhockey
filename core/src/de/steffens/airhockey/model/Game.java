@@ -141,11 +141,18 @@ public class Game {
     public static void createGame(GameConfiguration gameConfig) {
         getDisplay().dispose();
         getSimulation().stop();
-        gameTimeoutMs = System.currentTimeMillis() + gameConfig.getMaximumGameTimeMin() * 60 * 1000;
 
         main.createGame(gameConfig);
     }
-    
+
+
+    public static void start() {
+        gameTimeoutMs = System.currentTimeMillis() + config.getMaximumGameTimeMin() * 60 * 1000;
+        field.resetState(true);
+        simulation.start();
+    }
+
+
     public static void exit() {
         Gdx.app.exit();
     }
