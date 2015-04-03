@@ -4,6 +4,7 @@
  */
 package de.steffens.airhockey.control;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
@@ -29,6 +30,8 @@ public class Mouse extends InputAdapter {
 
     // singleton instance
     private static final Mouse instance = new Mouse();
+
+    private static final boolean isOSX = System.getProperty("os.name").contains("OS X");
 
     private static MousePosition[] lastMousePositions;
     private static int lastMousePositionIndex;
@@ -167,9 +170,19 @@ public class Mouse extends InputAdapter {
 
 
     public static void setMousePosition(Vector2D position) {
-        Vector3 screenPos = instance.cam.project(
-            new Vector3((float) position.getX(), (float) position.getY(), 0f));
-        Gdx.input.setCursorPosition(Math.round(screenPos.x),
-            Gdx.graphics.getHeight() - Math.round(screenPos.y));
+        if (Gdx.app.getType() == Application.ApplicationType.Desktop) {
+            Vector3 screenPos = instance.cam.project(
+                new Vector3((float) position.getX(), (float) position.getY(), 0f));
+
+            // workaround for bug in gdx / lwjgl:
+            // setting mouse position is not consistent across desktops...
+            if (isOSX) {
+                Gdx.input.setCursorPosition(Math.round(screenPos.x), Math.round(screenPos.y));
+            }
+            else {
+                Gdx.input.setCursorPosition(Math.round(screenPos.x),
+                    Gdx.graphics.getHeight() - Math.round(screenPos.y));
+            }
+        }
     }
 }
