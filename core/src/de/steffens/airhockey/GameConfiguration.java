@@ -33,6 +33,7 @@ public class GameConfiguration {
     private int height = 576;
     private int fps = 60;
     private boolean showCursor = false;
+    private boolean demo = false;
 
     // server side configuration
     private int numPlayers = 5;
@@ -136,6 +137,11 @@ public class GameConfiguration {
 
     public boolean isFullScreen() {
         return fullScreen;
+    }
+
+
+    public boolean isDemo() {
+        return demo;
     }
 
 
@@ -384,6 +390,7 @@ public class GameConfiguration {
         result.port = -1;
         result.showConsole = false;
         result.breakout = false;
+        result.demo = true;
         return result;
     }
 

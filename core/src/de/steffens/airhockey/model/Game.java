@@ -123,11 +123,11 @@ public class Game {
     public static void setConfiguration(GameConfiguration config) {
 	    Game.config = config;
     }
-	
-	public static boolean hasHumanPlayer() {
-		return config.isHumanPlayer();
+
+	public static boolean isDemo() {
+		return config.isDemo();
 	}
-	
+
 	public static boolean showCursor() {
 		return config.showCursor();
 	}

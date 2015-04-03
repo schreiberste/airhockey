@@ -175,10 +175,10 @@ public class GLDisplay {
 
         // probably stop old rendering here?
 
-        if (Game.hasHumanPlayer()) {
-            menu.disable();
-        } else {
+        if (Game.isDemo()) {
             menu.enable();
+        } else {
+            menu.disable();
         }
 
 //        setInframeCursor(frame);
