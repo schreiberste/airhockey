@@ -135,6 +135,10 @@ public class GameConfiguration {
         return humanPlayer;
     }
 
+    public boolean isDedicatedServer() {
+        return false;
+    }
+
     public boolean isBreakout() {
         return breakout;
     }

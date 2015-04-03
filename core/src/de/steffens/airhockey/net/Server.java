@@ -47,7 +47,7 @@ public class Server {
             public void run() {
                 // open connection and wait for remote players
                 Server.acceptConnections(config.getPort(), config.getRemotePlayers(),
-                    config.isHumanPlayer() ? 1 : 0);
+                    config.isDedicatedServer() ? 0 : 1);
 
                 // all players connected, start simulation
                 System.out.println("[" + Thread.currentThread().getName()+"]: players connected, starting simulation...");

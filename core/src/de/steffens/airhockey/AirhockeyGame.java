@@ -201,11 +201,12 @@ public class AirhockeyGame extends ApplicationAdapter {
             if (plIdx == Client.getPlayer()) {
                 if (config.isHumanPlayer()) {
                     players[plIdx] = new HumanClientPlayer(plIdx, disks[plIdx], puckModel);
+                    players[plIdx].setName(config.getPlayerName());
                 }
                 else {
                     players[plIdx] = new AiClientPlayer(plIdx, disks[plIdx], puckModel);
+                    players[plIdx].setName(config.getPlayerName() + " [AI]");
                 }
-                players[plIdx].setName(config.getPlayerName());
                 players[plIdx].setColor(config.getPlayerColor());
             } else {
                 players[plIdx] = new Player(plIdx, disks[plIdx], puckModel) {
@@ -272,9 +273,15 @@ public class AirhockeyGame extends ApplicationAdapter {
             simulation.addDisk(disks[playerIdx]);
 
             // the player model
-            if (playerIdx == 0 && config.isHumanPlayer()) {
-                players[playerIdx] = new HumanPlayer(playerIdx, disks[playerIdx], puckModel);
-                players[playerIdx].setName(config.getPlayerName());
+            if (playerIdx == 0) {
+                if (config.isHumanPlayer()) {
+                    players[playerIdx] = new HumanPlayer(playerIdx, disks[playerIdx], puckModel);
+                    players[playerIdx].setName(config.getPlayerName());
+                }
+                else {
+                    players[playerIdx] = new AIPlayer(playerIdx, disks[playerIdx], puckModel);
+                    players[playerIdx].setName(config.getPlayerName() + " [AI]");
+                }
                 players[playerIdx].setColor(config.getPlayerColor());
             } else {
                 if (remotePlayerIdx <= config.getRemotePlayers()) {
