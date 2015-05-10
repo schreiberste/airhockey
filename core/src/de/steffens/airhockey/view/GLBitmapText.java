@@ -51,7 +51,7 @@ public class GLBitmapText extends GLHudElement {
             return;
         }
         // load font texture with enabled mipmaps
-        String fontName = "DroidSans42";
+        String fontName = "FreeSans41";
         Texture texture = new Texture(
             Gdx.files.internal(ASSETS_PREFIX + "img/fonts/" + fontName + ".png"), true);
         texture.setFilter(TextureFilter.MipMapLinearLinear, TextureFilter.Linear);
