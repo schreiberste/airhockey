@@ -2,10 +2,13 @@ package de.steffens.airhockey.view;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.utils.Align;
 
 public class GLBitmapText extends GLHudElement {
 
@@ -21,7 +24,7 @@ public class GLBitmapText extends GLHudElement {
     public float y_pos = 0;
     public float scale = 1.0f;
     private float[] color;
-    private BitmapFont.HAlignment alignment = BitmapFont.HAlignment.LEFT;
+    private int alignment = Align.left;
 
     private float[] borderColor = null;
 
@@ -34,7 +37,7 @@ public class GLBitmapText extends GLHudElement {
      */
     public GLBitmapText(String text, int y) {
         this(text, 0, y);
-        alignment = BitmapFont.HAlignment.CENTER;
+        alignment = Align.center;
     }
 
     public static void disposeFont() {
@@ -47,10 +50,16 @@ public class GLBitmapText extends GLHudElement {
         if (font != null) {
             return;
         }
+        // load font texture with enabled mipmaps
+        String fontName = "DroidSans42";
+        Texture texture = new Texture(
+            Gdx.files.internal(ASSETS_PREFIX + "img/fonts/" + fontName + ".png"), true);
+        texture.setFilter(TextureFilter.MipMapLinearLinear, TextureFilter.Linear);
+
         font= new BitmapFont(
-            Gdx.files.internal(ASSETS_PREFIX + "img/fonts/DroidSans42.fnt"),
-            Gdx.files.internal(ASSETS_PREFIX + "img/fonts/DroidSans42.png"), false);
-        font.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+            Gdx.files.internal(ASSETS_PREFIX + "img/fonts/" + fontName + ".fnt"),
+            new TextureRegion(texture), false);
+
     }
 
     /**
@@ -82,7 +91,7 @@ public class GLBitmapText extends GLHudElement {
         this.x_pos = xStart;
         this.width = xEnd - xStart;
         this.y_pos = y;
-        alignment = BitmapFont.HAlignment.CENTER;
+        alignment = Align.center;
     }
 
     /**
@@ -103,11 +112,11 @@ public class GLBitmapText extends GLHudElement {
         }
         font.setColor(color[0], color[1], color[2], color[3]);
         if (scale != font.getScaleX()) {
-            font.setScale(scale);
+            font.getData().setScale(scale);
         }
-        font.drawWrapped(spriteBatch, text, x_pos, y_pos, width, alignment);
+        font.draw(spriteBatch, text, x_pos, y_pos, width, alignment, true);
         if (1 != font.getScaleX()) {
-            font.setScale(1f);
+            font.getData().setScale(1f);
         }
     }
 
