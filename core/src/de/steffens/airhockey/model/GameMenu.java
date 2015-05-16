@@ -303,7 +303,7 @@ public class GameMenu {
                         menu.add(new ColorMenuItem("Player Color", GameConfiguration.getConfig().getPlayerColor()) {
                             @Override
                             public void finished(float[] color) {
-                                GameConfiguration.getConfig().setPlayerColor(color);
+                                GameConfiguration.setPlayerColor(color);
                             }
                         });
                         menu.add(back);
