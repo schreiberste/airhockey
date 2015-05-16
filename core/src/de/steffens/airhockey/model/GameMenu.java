@@ -229,7 +229,7 @@ public class GameMenu {
                 menu.add(new MenuItem(PORT, getPort(), portInput));
                 menu.add(new MenuItem(NUMBER_OF_PLAYERS, getPlayers(), playersInput));
                 menu.add(new MenuItem(NUMBER_OF_REMOTE_PLAYERS, getRemotePlayers(), remotePlayersInput));
-                menu.add(new MenuItem("Start Game", new MenuAction() {
+                menu.add(new MenuItem("Join Game", new MenuAction() {
                     @Override
                     public void run(MenuItem item, int code) {
                         createNewGame(GameConfiguration.createServerConfig());
