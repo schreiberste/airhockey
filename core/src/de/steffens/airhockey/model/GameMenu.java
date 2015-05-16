@@ -353,7 +353,7 @@ public class GameMenu {
                                             currentVidMode = vidModes.length-1;
                                         }
                                     }
-                                    GameConfiguration.getConfig().setResolution(
+                                    GameConfiguration.setResolution(
                                         vidModes[currentVidMode].width, vidModes[currentVidMode].height);
                                     item.updateValue(getResolution(), false);
                                     videoModeChanged = true;
@@ -373,7 +373,7 @@ public class GameMenu {
                                     if (fullScreen) {
                                         if (currentVidMode == -1) {
                                             currentVidMode = nearestVidMode;
-                                            GameConfiguration.getConfig().setResolution(
+                                            GameConfiguration.setResolution(
                                                 vidModes[currentVidMode].width, vidModes[currentVidMode].height);
                                             resolutionMenu.updateValue(getResolution(), false);
                                         }
