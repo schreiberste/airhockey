@@ -259,7 +259,7 @@ public class GameMenu {
                     }
                 }));
                 menu.add(new MenuItem(PORT, getPort(), portInput));
-                menu.add(new MenuItem("Start Game", new MenuAction() {
+                menu.add(new MenuItem("Join Game", new MenuAction() {
                     @Override
                     public void run(MenuItem item, int code) {
                         if (GameConfiguration.getConfig().getPort() > 0
@@ -303,7 +303,7 @@ public class GameMenu {
                         menu.add(new ColorMenuItem("Player Color", GameConfiguration.getConfig().getPlayerColor()) {
                             @Override
                             public void finished(float[] color) {
-                                GameConfiguration.getConfig().setPlayerColor(color);
+                                GameConfiguration.setPlayerColor(color);
                             }
                         });
                         menu.add(back);
@@ -353,7 +353,7 @@ public class GameMenu {
                                             currentVidMode = vidModes.length-1;
                                         }
                                     }
-                                    GameConfiguration.getConfig().setResolution(
+                                    GameConfiguration.setResolution(
                                         vidModes[currentVidMode].width, vidModes[currentVidMode].height);
                                     item.updateValue(getResolution(), false);
                                     videoModeChanged = true;
@@ -373,7 +373,7 @@ public class GameMenu {
                                     if (fullScreen) {
                                         if (currentVidMode == -1) {
                                             currentVidMode = nearestVidMode;
-                                            GameConfiguration.getConfig().setResolution(
+                                            GameConfiguration.setResolution(
                                                 vidModes[currentVidMode].width, vidModes[currentVidMode].height);
                                             resolutionMenu.updateValue(getResolution(), false);
                                         }
