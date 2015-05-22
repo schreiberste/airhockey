@@ -21,6 +21,7 @@ public class Disk extends MovingObject {
     private final double radius;
     private final double height;
 
+    private short secondLastHitPlayerIndex = -1;
     private short lastHitPlayerIndex = -1;
     
     private double mass = 0.1;
@@ -73,14 +74,27 @@ public class Disk extends MovingObject {
         return height;
     }
 
-
+    public void clearLastHitPlayer() {
+    	this.secondLastHitPlayerIndex = -1;
+    	this.lastHitPlayerIndex = -1;
+    }
+    
     public void setLastHitPlayerIndex(short lastHitPlayerIndex) {
-        this.lastHitPlayerIndex = lastHitPlayerIndex;
+    	if (lastHitPlayerIndex != this.lastHitPlayerIndex) {
+    		assert (this.secondLastHitPlayerIndex == -1) || (this.secondLastHitPlayerIndex != this.lastHitPlayerIndex);
+    		this.secondLastHitPlayerIndex = this.lastHitPlayerIndex;
+    		this.lastHitPlayerIndex = lastHitPlayerIndex;
+    	}
     }
 
 
     public short getLastHitPlayerIndex() {
         return lastHitPlayerIndex;
+    }
+
+
+    public short getSecondLastHitPlayerIndex() {
+        return secondLastHitPlayerIndex;
     }
 
 
@@ -109,6 +123,7 @@ public class Disk extends MovingObject {
     	os.writeDouble(v.getY());
     	os.writeDouble(getAcceleration());
         os.writeShort(lastHitPlayerIndex);
+        os.writeShort(secondLastHitPlayerIndex);
         os.writeInt(getMaterial().getMaterialIdx());
         os.writeFloat(getMaterial().getAlpha());
     }
@@ -129,6 +144,7 @@ public class Disk extends MovingObject {
     	os.writeDouble(v.getY());
     	os.writeDouble(getAcceleration());
         os.writeShort(lastHitPlayerIndex);
+        os.writeShort(secondLastHitPlayerIndex);
         // NOTE: make sure that methods update() and skipUpdate() match!!!!
     }
 
@@ -144,6 +160,7 @@ public class Disk extends MovingObject {
     	setVelocity(getVelocity().reset(is.readDouble(), is.readDouble()));
     	setAcceleration(is.readDouble());
         lastHitPlayerIndex = is.readShort();
+        secondLastHitPlayerIndex = is.readShort();
         // NOTE: make sure that methods writeUpdate() and skipUpdate() match!!!!
     }
 
@@ -154,6 +171,7 @@ public class Disk extends MovingObject {
         is.readDouble();
         is.readDouble();
         is.readDouble();
+        is.readShort();
         is.readShort();
         // NOTE: make sure that methods update() and writeUpdate() match!!!!
     }
@@ -172,7 +190,8 @@ public class Disk extends MovingObject {
     	result.setPosition(result.getPosition().reset(is.readDouble(), is.readDouble()));
     	result.setVelocity(result.getVelocity().reset(is.readDouble(), is.readDouble()));
     	result.setAcceleration(is.readDouble());
-        result.setLastHitPlayerIndex(is.readShort());
+        result.lastHitPlayerIndex = is.readShort();
+        result.secondLastHitPlayerIndex = is.readShort();
     	int materialID = is.readInt();
         if (materialID < 0 || materialID > Material.defaultMaterials.length-1) {
             throw new RuntimeException("Unknown material: " + materialID);

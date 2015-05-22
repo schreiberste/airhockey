@@ -404,7 +404,7 @@ public class PlayingFieldNPlayers extends AbstractPlayingFieldBase {
             @Override
             public void collisionOccurred(DiskWallCollision e) {
                 if (e.wall == wall) {
-                    score(playerIndex, e.disk.getLastHitPlayerIndex());
+                    score(playerIndex, e.disk.getLastHitPlayerIndex(), e.disk.getSecondLastHitPlayerIndex());
 
                     // if the disk is not the main puck, remove it
                     if (e.disk != Game.getPuck()) {
@@ -422,6 +422,7 @@ public class PlayingFieldNPlayers extends AbstractPlayingFieldBase {
                     if (e.disk == Game.getPuck()) {
                         e.disk.setPosition(getKickoffPosition(playerIndex));
                         e.disk.setVelocity(0, 0);
+                        e.disk.clearLastHitPlayer();
                         // reset the playing field
                         resetState(false);
                     }
@@ -437,7 +438,7 @@ public class PlayingFieldNPlayers extends AbstractPlayingFieldBase {
     }
 
 
-    private void score(int playerIndex, int hitByPlayerIndex) {
+    private void score(int playerIndex, int hitByPlayerIndex, int hitBeforeByPlayerIndex) {
         // ignore goal hits after game over...
         if (Game.isGameOver()) {
             return;
@@ -451,16 +452,30 @@ public class PlayingFieldNPlayers extends AbstractPlayingFieldBase {
         int[] score = Game.getScore();
         String msg;
         if (hitByPlayerIndex >= 0) {
-            Player other = Game.getPlayer(hitByPlayerIndex);
-            msg = "The goal of '" + player.getName() + "' was hit by '" + other.getName() + "'!";
-
+            
             if (hitByPlayerIndex == playerIndex) {
                 // own goal...
-                score[playerIndex]--;
+            	if (hitBeforeByPlayerIndex >= 0) {
+            		assert hitBeforeByPlayerIndex != hitByPlayerIndex;
+            		
+            		Player other = Game.getPlayer(hitBeforeByPlayerIndex);
+            		score[hitBeforeByPlayerIndex]++;
+                    msg = "Own goal of '" + player.getName() + "'! Disc was last hit by '" + other.getName() + "'!";
+            	}
+            	else {
+            		for (int i = 0; i < Game.getPlayerCount(); ++i) {
+            			if (i != playerIndex) {
+            				score[i]++;
+            			}
+            		}
+                    msg = "Own goal of '" + player.getName() + "'! Everybody gets a point!";
+            	}
             }
             else {
                 // other player scored
                 score[hitByPlayerIndex]++;
+                Player other = Game.getPlayer(hitByPlayerIndex);
+                msg = "The goal of '" + player.getName() + "' was hit by '" + other.getName() + "'!";
             }
         }
         else {
